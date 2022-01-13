@@ -1,4 +1,4 @@
-const { models } = require('./../libs/sequelize')
+const { models } = require('../libs/sequelize')
 
 class CategoryService {
   async create (data) {

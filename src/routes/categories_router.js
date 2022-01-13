@@ -1,8 +1,10 @@
+'use strict'
+
 const express = require('express')
 
-const CategoryService = require('../services/category.service')
+const CategoryService = require('../services/category_service')
 const validatorHandler = require('../middlewares/validator_handler')
-const { createCategorySchema, updateCategorySchema, getCategorySchema } = require('../schemas/category.schema')
+const { createCategorySchema, updateCategorySchema, getCategorySchema } = require('../schemas/category_schema')
 
 const router = express.Router()
 const service = new CategoryService()

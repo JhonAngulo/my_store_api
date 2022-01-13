@@ -1,12 +1,14 @@
+'use strict'
+
 const express = require('express')
 
-const CustomerService = require('../services/customers.service')
+const CustomerService = require('../services/customers_service')
 const validationHandler = require('../middlewares/validator_handler')
 const {
   createCustomerSchema,
   getCustomerSchema,
   updateCustomerSchema
-} = require('../schemas/customer.schema')
+} = require('../schemas/customer_schema')
 
 const router = express.Router()
 const service = new CustomerService()

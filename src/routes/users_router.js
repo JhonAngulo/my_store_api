@@ -1,8 +1,10 @@
+'use strict'
+
 const express = require('express')
 
-const UserService = require('../services/user.service')
+const UserService = require('../services/user_service')
 const validatorHandler = require('../middlewares/validator_handler')
-const { updateUserSchema, createUserSchema, getUserSchema } = require('../schemas/user.schema')
+const { updateUserSchema, createUserSchema, getUserSchema } = require('../schemas/user_schema')
 
 const router = express.Router()
 const service = new UserService()

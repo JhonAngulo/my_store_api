@@ -1,8 +1,10 @@
+'use strict'
+
 const express = require('express')
 
-const ProductsService = require('../services/product.service')
+const ProductsService = require('../services/product_service')
 const validatorHandler = require('../middlewares/validator_handler')
-const { createProductSchema, updateProductSchema, getProductSchema, queryProductSchema } = require('../schemas/product.schema')
+const { createProductSchema, updateProductSchema, getProductSchema, queryProductSchema } = require('../schemas/product_schema')
 
 const router = express.Router()
 const service = new ProductsService()

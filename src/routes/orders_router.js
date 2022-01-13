@@ -1,12 +1,14 @@
+'use strict'
+
 const express = require('express')
 
-const OrderService = require('../services/order.service')
+const OrderService = require('../services/order_service')
 const validatorHandler = require('../middlewares/validator_handler')
 const {
   getOrderSchema,
   createOrderSchema,
   addItemSchema
-} = require('../schemas/order.schema')
+} = require('../schemas/order_schema')
 
 const router = express.Router()
 const service = new OrderService()

@@ -1,3 +1,5 @@
+'use strict'
+
 const { ValidationError } = require('sequelize')
 
 function logErrors (err, req, res, next) {
