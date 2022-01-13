@@ -4,6 +4,7 @@ const express = require('express')
 const cors = require('cors')
 const helmet = require('helmet')
 const routerApi = require('./routes')
+const checkApiKey = require('./middlewares/auth_hanlder')
 
 const { logErrors, errorHandler, boomErrorHandler, ormErrorHandler } = require('./middlewares/error_handler')
 
@@ -24,9 +25,11 @@ const options = {
   }
 }
 
+require('./utils/auth')
 app.use(cors(options))
 app.use(helmet())
 
+app.use(checkApiKey)
 routerApi(app)
 
 app.use(logErrors)
