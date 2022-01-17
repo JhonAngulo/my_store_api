@@ -21,6 +21,7 @@ class AuthService {
     }
 
     delete user.dataValues.password
+    delete user.dataValues.recoveryToken
     return user
   }
 
@@ -36,13 +37,53 @@ class AuthService {
     }
   }
 
-  async sendMail ({ email }) {
+  async sendRecovery ({ email }) {
     const user = await service.findByEmail({ email })
 
     if (!user) {
       throw boom.unauthorized()
     }
 
+    const payload = {
+      sub: user.id
+    }
+
+    const token = jwt.sing(payload, config.tokenSecret, { expiresIn: '15min' })
+    const link = `http://myfront.com/recovery?token=${token}`
+    await service.update(user.id, { recoveryToken: token })
+
+    const infoEmail = {
+      from: config.smtpUser,
+      to: email,
+      subject: 'Email para recuperar contraseña',
+      html: `<b>Ingresa a este link para recuperar la contraseña ${link} </b>`
+    }
+
+    const rta = await this.sendMail({ infoEmail })
+    return rta
+  }
+
+  async changePassword ({ token, newPassword }) {
+    try {
+      const payload = jwt.verify(token, config.tokenSecret)
+      const user = await service.findOne({ id: payload.sub })
+      if (user.recoveryToken !== token) {
+        throw boom.unauthorized()
+      }
+
+      const hash = await bcrypt.hash(newPassword, 10)
+
+      await service.update(user.id, { password: hash, recoveryToken: null })
+
+      return {
+        message: 'password changed'
+      }
+    } catch (error) {
+      throw boom.unauthorized()
+    }
+  }
+
+  async sendMail ({ infoEmail }) {
     const transporter = nodemailer.createTransport({
       host: 'smtp.gmail.com',
       secure: true,
@@ -53,13 +94,7 @@ class AuthService {
       }
     })
 
-    await transporter.sendMail({
-      from: config.smtpUser,
-      to: email,
-      subject: 'Este es un nuevo correo',
-      text: 'Hola test',
-      html: '<b>Hola test</b>'
-    })
+    await transporter.sendMail(infoEmail)
 
     return { message: 'mail sent' }
   }
