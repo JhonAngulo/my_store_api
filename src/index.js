@@ -4,7 +4,7 @@ const express = require('express')
 const cors = require('cors')
 const helmet = require('helmet')
 const routerApi = require('./routes')
-const checkApiKey = require('./middlewares/auth_hanlder')
+const { checkApiKey } = require('./middlewares/auth_hanlder')
 
 const { logErrors, errorHandler, boomErrorHandler, ormErrorHandler } = require('./middlewares/error_handler')
 

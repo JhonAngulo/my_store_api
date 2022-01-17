@@ -13,12 +13,26 @@ function checkApiKey (req, res, next) {
   }
 }
 
-function checkAdminRole (req, res, next) {
-  if (req.user.role === 'admin') {
+function checkAdminRole (req, _res, next) {
+  if (req.user.role === 'admin ') {
     next()
   } else {
-    next(boom.unauthorized())
+    next(boom.forbidden('se requieren permisos de administrador'))
   }
 }
 
-module.exports = checkApiKey
+function checkRoles (...roles) {
+  return (req, _res, next) => {
+    if (roles.includes(req.user.role)) {
+      next()
+    } else {
+      next(boom.forbidden('se requieren permisos de administrador'))
+    }
+  }
+}
+
+module.exports = {
+  checkApiKey,
+  checkRoles,
+  checkAdminRole
+}
